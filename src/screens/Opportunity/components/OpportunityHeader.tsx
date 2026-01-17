@@ -6,11 +6,11 @@ import { colors, spacing, typography } from '../../../theme';
 export function OpportunityHeader() {
   return (
     <View style={styles.row}>
-      <IconButton label="<" size={32} />
+      <IconButton name="chevron-left" size={32} />
       <Text style={styles.title}>Opportunity</Text>
       <View style={styles.icons}>
-        <IconButton label="Q" size={32} />
-        <IconButton label="N" size={32} style={styles.iconSpacing} />
+        <IconButton name="qrcode-scan" size={32} />
+        <IconButton name="bell-outline" size={32} style={styles.iconSpacing} />
       </View>
     </View>
   );

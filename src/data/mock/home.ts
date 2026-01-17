@@ -8,11 +8,11 @@ export const homeData = {
   earnRate: '20.00%',
   earnCurrency: 'USDT',
   markets: [
-    { id: 'bnb', symbol: 'BNB', price: 1219.61, changePct: 3.56 },
-    { id: 'p2p', symbol: 'USDT/USD', price: 0.997, changePct: 0 },
+    { id: 'bnb', symbol: 'BNB', price: 1219.61, changePct: 3.56, token: 'B', tokenColor: '#F0B90B' },
+    { id: 'p2p', symbol: 'USDT/USD', price: 0.997, changePct: 0, token: 'T', tokenColor: '#16A34A' },
   ],
   features: [
-    { id: 'fear', title: 'Fear & Greed', subtitle: 'Mixed', tag: 'Index', tone: 'warning' as const },
-    { id: 'send', title: 'Send Cash', subtitle: 'Send crypto easily', tag: 'New', tone: 'neutral' as const },
+    { id: 'fear', title: 'Fear & Greed', subtitle: 'Index', type: 'gauge' as const },
+    { id: 'send', title: 'Send Cash', subtitle: 'Send Crypto and\nBuy Crypto', type: 'text' as const },
   ],
 };

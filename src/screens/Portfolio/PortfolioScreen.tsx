@@ -14,11 +14,11 @@ export default function PortfolioScreen() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
       <View style={styles.header}>
         <View style={styles.headerRow}>
-          <IconButton label="<" size={32} />
+          <IconButton name="chevron-left" size={32} />
           <Text style={styles.title}>Portfolio</Text>
           <View style={styles.headerIcons}>
-            <IconButton label="Q" size={32} />
-            <IconButton label="N" size={32} style={styles.iconSpacing} />
+            <IconButton name="qrcode-scan" size={32} />
+            <IconButton name="bell-outline" size={32} style={styles.iconSpacing} />
           </View>
         </View>
         <View style={styles.pnlRow}>
