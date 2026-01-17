@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card } from '../../../components/ui/Card';
 import { colors, spacing, typography } from '../../../theme';
 import { formatCurrency } from '../../../utils/format';
@@ -19,19 +20,25 @@ export function TotalBalanceCard({
   const sign = pnlPositive ? '+' : '';
   return (
     <Card style={styles.card}>
-      <View style={styles.headerRow}>
+      <View style={styles.labelRow}>
         <Text style={styles.label}>Est. Total Value (BTC)</Text>
+        <Icon name="chevron-down" size={16} color={colors.muted} />
+      </View>
+      <View style={styles.valueRow}>
+        <View>
+          <Text style={styles.value}>{totalBtc}</Text>
+          <Text style={styles.subtle}>{formatCurrency(totalUsd)}</Text>
+        </View>
         <TouchableOpacity activeOpacity={0.8} style={styles.actionButton}>
           <Text style={styles.actionText}>Add Funds</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.value}>{totalBtc}</Text>
-      <Text style={styles.subtle}>{formatCurrency(totalUsd)}</Text>
       <View style={styles.pnlRow}>
         <Text style={styles.pnlLabel}>Today's PNL</Text>
         <Text style={[styles.pnlValue, pnlPositive ? styles.pnlPositive : styles.pnlNegative]}>
           {sign}{todayPnl.toFixed(8)} ({sign}{todayPnlPct.toFixed(2)}%)
         </Text>
+        <Icon name="chevron-down" size={16} color={colors.muted} style={styles.pnlIcon} />
       </View>
     </Card>
   );
@@ -41,21 +48,25 @@ const styles = StyleSheet.create({
   card: {
     paddingVertical: spacing.xl,
   },
-  headerRow: {
+  labelRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: spacing.sm,
   },
   label: {
     fontSize: typography.size.sm,
     color: colors.muted,
     fontFamily: typography.fontFamily.medium,
   },
+  valueRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   value: {
-    fontSize: typography.size.xxl,
+    fontSize: 30,
     fontFamily: typography.fontFamily.bold,
     color: colors.text,
-    marginTop: spacing.sm,
   },
   subtle: {
     fontSize: typography.size.sm,
@@ -75,6 +86,9 @@ const styles = StyleSheet.create({
   pnlValue: {
     fontSize: typography.size.sm,
     fontFamily: typography.fontFamily.medium,
+  },
+  pnlIcon: {
+    marginLeft: spacing.xs,
   },
   pnlPositive: {
     color: colors.green,
