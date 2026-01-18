@@ -18,6 +18,11 @@ export function PnlDistributionCard({
         <Text style={styles.monthText}>{month}</Text>
         <Text style={styles.monthArrow}>{'>'}</Text>
       </View>
+      <View style={styles.weekRow}>
+        {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((day) => (
+          <Text key={day} style={styles.weekText}>{day}</Text>
+        ))}
+      </View>
       <View style={styles.segmentRow}>
         {items.map((item) => (
           <View
@@ -50,6 +55,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,
+  },
+  weekRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
+  },
+  weekText: {
+    fontSize: typography.size.xs,
+    color: colors.muted,
   },
   monthText: {
     fontSize: typography.size.sm,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Svg, { Path, Circle } from 'react-native-svg';
 import { Card } from '../../../components/ui/Card';
 import { colors, spacing, typography } from '../../../theme';
 
@@ -19,11 +20,17 @@ export function FeatureGrid({
           </View>
           <Text style={styles.subtitle}>{item.subtitle}</Text>
           {item.type === 'gauge' ? (
-            <View style={styles.gauge}>
-              <View style={[styles.gaugeBar, styles.gaugeRed]} />
-              <View style={[styles.gaugeBar, styles.gaugeYellow]} />
-              <View style={[styles.gaugeBar, styles.gaugeGreen]} />
-              <View style={styles.gaugeDot} />
+            <View style={styles.gaugeWrap}>
+              <Svg width={120} height={70} viewBox="0 0 120 70">
+                <Path d="M12 60 A48 48 0 0 1 42 20" stroke="#EF4444" strokeWidth={8} strokeLinecap="round" fill="none" />
+                <Path d="M42 20 A48 48 0 0 1 78 20" stroke="#F59E0B" strokeWidth={8} strokeLinecap="round" fill="none" />
+                <Path d="M78 20 A48 48 0 0 1 108 60" stroke="#10B981" strokeWidth={8} strokeLinecap="round" fill="none" />
+                <Circle cx="96" cy="36" r="6" fill={colors.text} />
+              </Svg>
+              <View style={styles.gaugeLabel}>
+                <Text style={styles.gaugeValue}>28</Text>
+                <Text style={styles.gaugeCaption}>Fear</Text>
+              </View>
             </View>
           ) : (
             <View style={styles.textPlaceholder} />
@@ -60,36 +67,23 @@ const styles = StyleSheet.create({
     color: colors.muted,
     marginTop: spacing.xs,
   },
-  gauge: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  gaugeWrap: {
     marginTop: spacing.md,
-    position: 'relative',
+    alignItems: 'center',
   },
-  gaugeBar: {
-    height: 6,
-    flex: 1,
-    borderRadius: 999,
-    marginRight: 4,
+  gaugeLabel: {
+    marginTop: -10,
+    alignItems: 'center',
   },
-  gaugeRed: {
-    backgroundColor: '#FCA5A5',
+  gaugeValue: {
+    fontSize: typography.size.md,
+    fontFamily: typography.fontFamily.bold,
+    color: colors.text,
   },
-  gaugeYellow: {
-    backgroundColor: '#FCD34D',
-  },
-  gaugeGreen: {
-    backgroundColor: '#86EFAC',
-    marginRight: 0,
-  },
-  gaugeDot: {
-    position: 'absolute',
-    right: '25%',
-    top: -4,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: colors.text,
+  gaugeCaption: {
+    fontSize: typography.size.sm,
+    color: colors.muted,
+    marginTop: spacing.xs,
   },
   textPlaceholder: {
     height: 24,

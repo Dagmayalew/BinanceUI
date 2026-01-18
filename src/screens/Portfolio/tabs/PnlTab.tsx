@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Spacer } from '../../../components/layout/Spacer';
 import { Card } from '../../../components/ui/Card';
 import { PnlLineChart } from '../components/PnlLineChart';
@@ -13,35 +14,16 @@ export default function PnlTab() {
 
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-      <Text style={styles.sectionTitle}>PNL Trends</Text>
-      <Text style={styles.sectionDate}>{portfolioData.pnlTrendsDate}</Text>
-      <View style={styles.statsRow}>
-        <View style={styles.statBlock}>
-          <Text style={styles.statLabel}>Daily PNL - USDT</Text>
-          <Text style={[styles.statValue, dailyPositive ? styles.positive : styles.negative]}>
-            {dailyPositive ? '+' : ''}{portfolioData.dailyPnl.toFixed(8)} USDT
-          </Text>
-          <Text style={[styles.statDelta, dailyPositive ? styles.positive : styles.negative]}>
-            {dailyPositive ? '+' : ''}{portfolioData.dailyPnlPct.toFixed(2)}%
-          </Text>
-        </View>
-        <View style={styles.statBlock}>
-          <Text style={styles.statLabel}>7D Cumulative PNL</Text>
-          <Text style={[styles.statValue, cumulativePositive ? styles.positive : styles.negative]}>
-            {cumulativePositive ? '+' : ''}{portfolioData.cumulativePnl.toFixed(8)} USDT
-          </Text>
-          <Text style={[styles.statDelta, cumulativePositive ? styles.positive : styles.negative]}>
-            {cumulativePositive ? '+' : ''}{portfolioData.cumulativePnlPct.toFixed(2)}%
-          </Text>
-        </View>
-      </View>
+      
+      
       <Spacer size={spacing.lg} />
       <PnlLineChart data={portfolioData.pnlChart} />
       <Spacer size={spacing.lg} />
       <View style={styles.rangeRow}>
         {['7D', '1M', '3M', '6M', '1Y', 'Customize'].map((label, index) => (
-          <View key={label} style={[styles.rangePill, index === 0 ? styles.rangeActive : null]}>
+          <View key={label} style={styles.rangeItem}>
             <Text style={[styles.rangeText, index === 0 ? styles.rangeTextActive : null]}>{label}</Text>
+            {index === 0 && <View style={styles.rangeUnderline} />}
           </View>
         ))}
       </View>
@@ -67,9 +49,14 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxxl,
   },
   sectionTitle: {
-    fontSize: typography.size.md,
+    fontSize: typography.size.lg,
     fontFamily: typography.fontFamily.medium,
     color: colors.text,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   sectionDate: {
     fontSize: typography.size.sm,
@@ -100,18 +87,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  rangePill: {
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 16,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    marginRight: spacing.sm,
+  rangeItem: {
+    marginRight: spacing.lg,
     marginBottom: spacing.sm,
-  },
-  rangeActive: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
+    alignItems: 'center',
   },
   rangeText: {
     fontSize: typography.size.xs,
@@ -120,6 +99,13 @@ const styles = StyleSheet.create({
   rangeTextActive: {
     color: colors.text,
     fontFamily: typography.fontFamily.medium,
+  },
+  rangeUnderline: {
+    width: 16,
+    height: 2,
+    backgroundColor: colors.yellow,
+    borderRadius: 999,
+    marginTop: spacing.xs,
   },
   scoreLabel: {
     fontSize: typography.size.sm,
@@ -157,7 +143,7 @@ const styles = StyleSheet.create({
     color: colors.muted,
   },
   positive: {
-    color: colors.green,
+    color: '#14B8A6',
   },
   negative: {
     color: colors.red,
