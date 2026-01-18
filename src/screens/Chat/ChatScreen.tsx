@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
-import { Screen } from '../../components/layout/Screen';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements'; // ✅ add
 import { IconButton } from '../../components/ui/IconButton';
 import { colors, spacing, typography } from '../../theme';
 import { addMessage, getMessages, seedMockConversation, markSupportAsRead } from '../../db/messageRepo';
@@ -9,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function ChatScreen() {
   const navigation = useNavigation();
+  const headerHeight = useHeaderHeight(); 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
 
@@ -25,9 +35,7 @@ export default function ChatScreen() {
 
   const sendMessage = useCallback(async () => {
     const trimmed = input.trim();
-    if (!trimmed) {
-      return;
-    }
+    if (!trimmed) return;
     setInput('');
     await addMessage(trimmed, 'me');
     await loadMessages();
@@ -36,26 +44,36 @@ export default function ChatScreen() {
   const items = useMemo(() => messages, [messages]);
 
   return (
-    <Screen>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={styles.flex}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={headerHeight} 
+    >
+      <View style={styles.flex}>
+        {/* Your custom header */}
         <View style={styles.header}>
           <IconButton name="chevron-left" size={28} onPress={() => navigation.goBack()} />
           <Text style={styles.title}>Chats</Text>
           <View style={styles.headerSpacer} />
         </View>
+
         <FlatList
           data={items}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
+          keyboardShouldPersistTaps="handled" 
           renderItem={({ item }) => {
             const isMe = item.sender === 'me';
             return (
               <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleSupport]}>
-                <Text style={[styles.bubbleText, isMe ? styles.bubbleTextMe : styles.bubbleTextSupport]}>{item.text}</Text>
+                <Text style={[styles.bubbleText, isMe ? styles.bubbleTextMe : styles.bubbleTextSupport]}>
+                  {item.text}
+                </Text>
               </View>
             );
           }}
         />
+
         <View style={styles.inputRow}>
           <TextInput
             value={input}
@@ -63,23 +81,26 @@ export default function ChatScreen() {
             placeholder="Type a message"
             placeholderTextColor={colors.muted}
             style={styles.input}
+            returnKeyType="send"
+            onSubmitEditing={sendMessage}
           />
           <Pressable style={styles.sendButton} onPress={sendMessage}>
             <Text style={styles.sendText}>Send</Text>
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
-    </Screen>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
+    backgroundColor: colors.bg,
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xxxl,
+    paddingTop: spacing.lg,
     paddingBottom: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
