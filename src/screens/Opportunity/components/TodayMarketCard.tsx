@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card } from '../../../components/ui/Card';
 import { colors, spacing, typography } from '../../../theme';
 
@@ -7,7 +8,7 @@ export function TodayMarketCard({ title, summary }: { title: string; summary: st
   return (
     <Card style={styles.card}>
       <View style={styles.badgeRow}>
-        <View style={styles.badge} />
+        <Icon name="zodiac-gemini" size={16} color={colors.text} style={styles.badgeIcon} />
         <Text style={styles.badgeText}>{title}</Text>
       </View>
       <Text style={styles.summary}>{summary}</Text>
@@ -17,19 +18,15 @@ export function TodayMarketCard({ title, summary }: { title: string; summary: st
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFF7E6',
-    borderColor: '#FDE68A',
+    backgroundColor: '#F3F4FF',
+    borderColor: '#E5E7FF',
   },
   badgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  badge: {
-    width: 18,
-    height: 18,
-    borderRadius: 6,
-    backgroundColor: colors.yellow,
+  badgeIcon: {
     marginRight: spacing.sm,
   },
   badgeText: {

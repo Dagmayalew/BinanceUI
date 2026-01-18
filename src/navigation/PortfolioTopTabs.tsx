@@ -12,7 +12,7 @@ export default function PortfolioTopTabs() {
     <Tab.Navigator
       screenOptions={{
         tabBarIndicatorStyle: { backgroundColor: colors.text, height: 2, borderRadius: 2 },
-        tabBarLabelStyle: { fontSize: typography.size.sm, fontFamily: typography.fontFamily.medium, textTransform: 'none' },
+        tabBarLabelStyle: { fontSize: typography.size.md, fontFamily: typography.fontFamily.medium, textTransform: 'none' },
         tabBarStyle: { backgroundColor: colors.bg, elevation: 0, shadowOpacity: 0 },
         tabBarActiveTintColor: colors.text,
         tabBarInactiveTintColor: colors.muted,

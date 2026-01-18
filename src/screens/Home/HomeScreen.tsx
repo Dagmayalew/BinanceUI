@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, StatusBar, View, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Path } from 'react-native-svg';
 import { Screen } from '../../components/layout/Screen';
@@ -11,15 +13,25 @@ import { Chip } from '../../components/ui/Chip';
 import { IconButton } from '../../components/ui/IconButton';
 import { colors, spacing, typography } from '../../theme';
 import { homeData } from '../../data/mock/home';
+import { useBalanceStore } from '../../store/balanceStore';
+import type { RootStackParamList } from '../../types/navigation';
 
 export default function HomeScreen() {
+  const { totalBtc, totalUsd, todayPnl, todayPnlPct, fetchBalance, addFunds, init } = useBalanceStore();
+
+  useEffect(() => {
+    init();
+    fetchBalance();
+  }, [fetchBalance, init]);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <Screen>
       <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
+      <View style={styles.page}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.topRow}>
-          <Chip label="Highlight" tone="neutral" />
-        </View>
+        {/* <View style={styles.highlightPill}>
+                  <Text style={styles.highlightText}>Highlight</Text>
+                </View> */}
         <View style={styles.headerRow}>
           <View style={styles.leftIcons}>
             <IconButton name="menu" size={30} />
@@ -39,20 +51,25 @@ export default function HomeScreen() {
           <Icon name="magnify" size={18} color={colors.muted} />
         </View>
         <TotalBalanceCard
-          totalBtc={homeData.totalValueBtc}
-          totalUsd={homeData.totalValueUsd}
-          todayPnl={homeData.todayPnl}
-          todayPnlPct={homeData.todayPnlPct}
+          totalBtc={totalBtc}
+          totalUsd={totalUsd}
+          todayPnl={todayPnl}
+          todayPnlPct={todayPnlPct}
+          onAddFunds={() => navigation.navigate('AddFunds')}
         />
         <Spacer size={spacing.lg} />
         <Card>
           <View style={styles.earnRow}>
             <View style={styles.earnLeft}>
-              <View style={styles.earnIcon}>
+                <View>
+                    <Text style={styles.earnTitle}>Earn</Text>
+                    <View style={styles.earnIcon}>
                 <Icon name="wallet-outline" size={18} color={colors.text} />
               </View>
+                </View>
+              
               <View>
-                <Text style={styles.earnTitle}>Earn</Text>
+                
                 <Text style={styles.earnSubtitle}>Earn up to {homeData.earnRate} APR</Text>
                 <Text style={styles.earnSubtitle}>with {homeData.earnCurrency}</Text>
               </View>
@@ -67,7 +84,7 @@ export default function HomeScreen() {
           <Text style={styles.bannerText}>Discover personalized home experiences!</Text>
           <View style={styles.bannerActions}>
             <View style={styles.bannerArrow}>
-              <Icon name="arrow-right" size={14} color={colors.surface} />
+              <Icon name="arrow-right" size={14} color={colors.yellowSoft} />
             </View>
             <Icon name="close" size={16} color={colors.text} style={styles.bannerClose} />
           </View>
@@ -75,7 +92,11 @@ export default function HomeScreen() {
         <Spacer size={spacing.lg} />
         <View style={styles.marketRow}>
           {homeData.markets.map((market, index) => (
-            <Card key={market.id} style={[styles.marketCard, index === 0 ? styles.marketSpacing : null]}>
+            <Card
+              key={market.id}
+              style={[styles.marketCard, index === 0 ? styles.marketSpacing : null]}
+              onPress={market.id === 'bnb' ? () => navigation.navigate('OpportunityTabs') : undefined}
+            >
               {market.id === 'p2p' ? (
                 <View>
                   <View style={styles.marketMeta}>
@@ -136,19 +157,42 @@ export default function HomeScreen() {
         <Spacer size={spacing.lg} />
         <FeatureGrid items={homeData.features} />
       </ScrollView>
+      <View style={styles.discoverBar}>
+        <View style={styles.discoverRow}>
+          {['Discover', 'Following', 'Campaign', 'News', 'Ann'].map((label, index) => (
+            <View key={label} style={styles.discoverItem}>
+              <Text style={[styles.discoverText, index === 0 ? styles.discoverTextActive : null]}>{label}</Text>
+                
+            </View>
+          ))}
+        </View>
+      </View>
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
   container: {
     padding: spacing.lg,
-    paddingBottom: spacing.xxxl,
+    paddingBottom: spacing.xxxl + 120,
+    paddingTop: spacing.xxxl,
   },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.md,
+   highlightPill: {
+    maxWidth: 100,  
+    backgroundColor: '#BDBDBD',
+    borderRadius: 18,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    marginLeft: spacing.sm,
+  },
+  highlightText: {
+    color: colors.surface,
+    fontSize: typography.size.sm,
+    fontFamily: typography.fontFamily.medium,
   },
   headerRow: {
     flexDirection: 'row',
@@ -188,7 +232,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   searchBar: {
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingHorizontal: spacing.md,
     paddingVertical: 10,
@@ -199,7 +243,7 @@ const styles = StyleSheet.create({
   },
   searchText: {
     fontSize: typography.size.sm,
-    color: colors.muted,
+    color: colors.gray,
   },
   searchIcon: {
     backgroundColor: 'transparent',
@@ -216,25 +260,25 @@ const styles = StyleSheet.create({
   earnIcon: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md,
   },
   earnTitle: {
-    fontSize: typography.size.md,
-    fontFamily: typography.fontFamily.medium,
-    color: colors.text,
+    fontSize: typography.size.sm,
+    fontFamily: typography.fontFamily.regular,
+    color: colors.muted,
+    paddingBottom: spacing.xs,
   },
   earnSubtitle: {
     fontSize: typography.size.sm,
-    color: colors.muted,
+    color: colors.text,
     marginTop: spacing.xs,
+    fontFamily: typography.fontFamily.medium,
   },
   subscribeButton: {
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.yellowSoft,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: 8,
@@ -367,6 +411,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+  },
+  discoverBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: -4,
+    backgroundColor: colors.bg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  discoverRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  discoverItem: {
+    alignItems: 'center',
+  },
+  discoverText: {
+    fontSize: typography.size.sm,
+    color: colors.muted,
+  },
+  discoverTextActive: {
+    color: colors.text,
+    fontFamily: typography.fontFamily.medium,
+  },
+  discoverUnderline: {
+    width: 16,
+    height: 3,
+    borderRadius: 999,
+    backgroundColor: colors.yellow,
+    marginTop: spacing.xs,
   },
   positive: {
     color: colors.green,

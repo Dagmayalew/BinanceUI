@@ -10,11 +10,13 @@ export function TotalBalanceCard({
   totalUsd,
   todayPnl,
   todayPnlPct,
+  onAddFunds,
 }: {
-  totalBtc: string;
+  totalBtc: number;
   totalUsd: number;
   todayPnl: number;
   todayPnlPct: number;
+  onAddFunds?: () => void;
 }) {
   const pnlPositive = todayPnl >= 0;
   const sign = pnlPositive ? '+' : '';
@@ -26,10 +28,10 @@ export function TotalBalanceCard({
       </View>
       <View style={styles.valueRow}>
         <View>
-          <Text style={styles.value}>{totalBtc}</Text>
+          <Text style={styles.value}>{totalBtc.toFixed(7)}</Text>
           <Text style={styles.subtle}>{formatCurrency(totalUsd)}</Text>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.actionButton}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.actionButton} onPress={onAddFunds}>
           <Text style={styles.actionText}>Add Funds</Text>
         </TouchableOpacity>
       </View>
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
     color: colors.red,
   },
   actionButton: {
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.yellowSoft,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: 8,

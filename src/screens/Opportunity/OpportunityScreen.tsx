@@ -8,6 +8,7 @@ import { TodayMarketCard } from './components/TodayMarketCard';
 import { BtcValuationCard } from './components/BtcValuationCard';
 import { colors, spacing, typography } from '../../theme';
 import { opportunityData } from '../../data/mock/opportunity';
+import { Spacer } from '../../components/layout/Spacer';
 
 export default function OpportunityScreen() {
   return (
@@ -23,6 +24,8 @@ export default function OpportunityScreen() {
           ))}
         </View>
         <TodayMarketCard title={opportunityData.todayMarket.title} summary={opportunityData.todayMarket.summary} />
+        <Spacer size={spacing.lg} />
+        
         <View style={styles.dualRow}>
           <FearGreedCard
             value={opportunityData.fearGreed.value}
@@ -32,12 +35,9 @@ export default function OpportunityScreen() {
           <View style={styles.dualSpacing} />
           <BtcValuationCard score={opportunityData.btcValuation.score} label={opportunityData.btcValuation.label} />
         </View>
-        <Text style={styles.sectionTitle}>ETF Net Flow</Text>
-        <EtfFundFlowCard
-          inflow={opportunityData.etfFundFlow.inflow}
-          outflow={opportunityData.etfFundFlow.outflow}
-          totalNetAssets={opportunityData.etfFundFlow.totalNetAssets}
-        />
+     <Spacer size={spacing.lg} />
+    
+        <EtfFundFlowCard />
       </ScrollView>
     </Screen>
   );
@@ -46,24 +46,23 @@ export default function OpportunityScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: spacing.lg,
+    paddingTop: spacing.xxxl,
     paddingBottom: spacing.xxxl,
   },
   tabRow: {
     flexDirection: 'row',
     marginTop: spacing.sm,
     marginBottom: spacing.lg,
-    flexWrap: 'wrap',
   },
   tabItem: {
-    borderRadius: 16,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    backgroundColor: colors.surfaceAlt,
-    marginRight: spacing.sm,
+    marginRight: spacing.md,
     marginBottom: spacing.sm,
   },
   tabActive: {
-    backgroundColor: colors.yellowSoft,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.yellow,
   },
   tabText: {
     fontSize: typography.size.sm,
@@ -73,16 +72,48 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontFamily: typography.fontFamily.medium,
   },
+  dualHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  dualHeaderItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  dualHeaderDivider: {
+    width: spacing.md,
+  },
+  dualHeaderText: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.fontFamily.medium,
+    color: colors.text,
+  },
+  dualArrow: {
+    fontSize: typography.size.sm,
+    color: colors.muted,
+  },
+  sectionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: spacing.lg,
+    marginBottom: spacing.md,
+  },
   sectionTitle: {
     fontSize: typography.size.md,
     fontFamily: typography.fontFamily.medium,
     color: colors.text,
-    marginTop: spacing.lg,
-    marginBottom: spacing.md,
+  },
+  sectionArrow: {
+    fontSize: typography.size.md,
+    color: colors.muted,
   },
   dualRow: {
     flexDirection: 'row',
-    marginTop: spacing.lg,
   },
   dualCard: {
     flex: 1,

@@ -1,12 +1,25 @@
 export type BottomTabParamList = {
   Home: undefined;
-  Opportunity: undefined;
-  Portfolio: undefined;
+  Markets: undefined;
+  Trade: undefined;
+  Futures: undefined;
+  Assets: undefined;
 };
+
+import type { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Splash: undefined;
   MainTabs: undefined;
+  Bnb: undefined;
+  OpportunityTabs: NavigatorScreenParams<OpportunityTabParamList> | undefined;
+  AddFunds: undefined;
+};
+
+export type OpportunityTabParamList = {
+  Opportunity: undefined;
+  Calendar: undefined;
+  Portfolio: undefined;
 };
 
 export type PortfolioTopTabParamList = {
