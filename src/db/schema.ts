@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
 export const schema = appSchema({
-  version: 1,
+  version: 3,
   tables: [
     tableSchema({
       name: 'balances',
@@ -12,6 +12,15 @@ export const schema = appSchema({
         { name: 'today_pnl_pct', type: 'number' },
         { name: 'btc_rate', type: 'number' },
         { name: 'updated_at', type: 'number' },
+      ],
+    }),
+    tableSchema({
+      name: 'messages',
+      columns: [
+        { name: 'text', type: 'string' },
+        { name: 'sender', type: 'string' },
+        { name: 'created_at', type: 'number' },
+        { name: 'is_read', type: 'boolean' },
       ],
     }),
   ],

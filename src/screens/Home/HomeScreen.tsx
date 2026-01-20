@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, StatusBar, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Path } from 'react-native-svg';
@@ -15,14 +15,33 @@ import { colors, spacing, typography } from '../../theme';
 import { homeData } from '../../data/mock/home';
 import { useBalanceStore } from '../../store/balanceStore';
 import type { RootStackParamList } from '../../types/navigation';
+import { getSupportCount, seedMockConversation } from '../../db/messageRepo';
 
 export default function HomeScreen() {
   const { totalBtc, totalUsd, todayPnl, todayPnlPct, fetchBalance, addFunds, init } = useBalanceStore();
+  const [supportCount, setSupportCount] = useState(0);
 
   useEffect(() => {
     init();
     fetchBalance();
   }, [fetchBalance, init]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let active = true;
+      const loadCount = async () => {
+        await seedMockConversation();
+        const count = await getSupportCount();
+        if (active) {
+          setSupportCount(count);
+        }
+      };
+      loadCount();
+      return () => {
+        active = false;
+      };
+    }, [])
+  );
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <Screen>
@@ -35,7 +54,13 @@ export default function HomeScreen() {
         <View style={styles.headerRow}>
           <View style={styles.leftIcons}>
             <IconButton name="menu" size={30} />
-            <IconButton name="message-text-outline" size={30} style={styles.iconSpacing} badge="10" />
+            <IconButton
+              name="message-text-outline"
+              size={30}
+              style={styles.iconSpacing}
+              badge={supportCount > 0 ? String(supportCount) : undefined}
+              onPress={() => navigation.navigate('ChatList')}
+            />
           </View>
           <View style={styles.segmented}>
             <Text style={[styles.segmentText, styles.segmentActive]}>Exchange</Text>

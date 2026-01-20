@@ -14,6 +14,8 @@ export type RootStackParamList = {
   Bnb: undefined;
   OpportunityTabs: NavigatorScreenParams<OpportunityTabParamList> | undefined;
   AddFunds: undefined;
+  ChatList: undefined;
+  Chat: undefined;
 };
 
 export type OpportunityTabParamList = {

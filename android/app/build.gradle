@@ -105,12 +105,11 @@ android {
         debug {
             signingConfig signingConfigs.debug
         }
-        
-            release {
-    signingConfig signingConfigs.release
-    minifyEnabled false
-    shrinkResources false
-  }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+        }
     }
 }
 
